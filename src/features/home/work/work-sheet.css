@@ -1,0 +1,345 @@
+/*
+ * Work chapter sheet. A native <dialog> filling the viewport (top layer, so the transformed
+ * `.app-main__inner` cannot trap it), our own scrim, and a sheet in the sidebar's material.
+ * No backdrop-filter: the signal-flow canvas animates underneath and a blur over it costs every frame.
+ * Motion lives in use-sheet.ts; this file only lays out.
+ */
+
+.sh {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+}
+.sh::backdrop {
+  background: transparent;
+}
+.sh:focus {
+  outline: none;
+}
+
+.sh__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+}
+
+.sh__panel {
+  position: absolute;
+  inset: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  margin-inline: auto;
+  width: 100%;
+  overflow: clip;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  background: var(--surface-sheet);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-float);
+  outline: none;
+  will-change: transform;
+}
+
+/* ---------- Grab bar + header (the drag handle) ---------- */
+
+.sh__grab {
+  display: grid;
+  flex: none;
+  place-items: center;
+  height: 26px;
+  cursor: grab;
+  touch-action: none;
+}
+.sh__grab > span {
+  width: 40px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--line-strong);
+}
+.sh__grab:active {
+  cursor: grabbing;
+}
+
+.sh__head {
+  display: flex;
+  flex: none;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 20px 20px;
+  touch-action: none;
+  transition: box-shadow 200ms ease;
+}
+.sh__head[data-scrolled] {
+  box-shadow: 0 1px 0 var(--line);
+}
+
+.sh__title {
+  margin: 8px 0 0;
+  font-size: clamp(1.8rem, 3.6vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.sh__intro {
+  max-width: 62ch;
+  margin: 0 0 32px;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.sh__close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  color: var(--ink);
+  transition: background-color 140ms ease;
+}
+.sh__close:hover {
+  background: var(--surface-3);
+}
+.sh__close svg {
+  transition: transform var(--dur-press) ease-out;
+}
+.sh__close:active svg {
+  transform: scale(0.86);
+}
+
+/* ---------- Body ---------- */
+
+.sh__body {
+  flex: 1;
+  min-height: 0;
+  padding: 8px 20px max(40px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Shared picture frame. */
+.sh__shot {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: clip;
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  box-shadow: 0 0 0 1px var(--line);
+}
+.sh__shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform var(--dur-slow) var(--ease-spring);
+}
+.sh__shot--contain img {
+  padding: 6%;
+  object-fit: contain;
+  object-position: center;
+}
+a:hover > .sh__shot img,
+a.sh__shot:hover img {
+  transform: scale(1.025);
+}
+
+/* Picture-led grid, one per group when the chapter has groups. */
+.sh__sets {
+  display: grid;
+  gap: 56px;
+}
+.sh__set > .sh__group-title {
+  margin-bottom: 20px;
+}
+
+.sh__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  gap: 36px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sh__link {
+  display: grid;
+  gap: 16px;
+}
+
+.sh__cap {
+  display: grid;
+  gap: 6px;
+}
+
+.sh__name {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+.sh__name svg {
+  flex: none;
+  color: var(--ink-3);
+  transition: transform var(--dur-fast) var(--ease-spring), color 160ms ease;
+}
+a:hover .sh__name svg {
+  color: var(--accent-ink);
+  transform: translate(2px, -2px);
+}
+
+.sh__sum {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+.sh__status {
+  margin-left: 12px;
+  color: var(--ink-2);
+}
+
+/* Grouped rows (no pictures). */
+.sh__groups {
+  display: grid;
+  gap: 40px;
+}
+.sh__group-title {
+  margin: 0 0 4px;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.sh__group > ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sh__row {
+  display: grid;
+  gap: 6px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Single build with a gallery. */
+.sh__single {
+  display: grid;
+  gap: 28px;
+}
+.sh__shot--lead {
+  aspect-ratio: 16 / 10;
+}
+.sh__live {
+  justify-self: start;
+}
+.sh__gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* App screens read from the top left (lists, tables): crop from there, never cut the left edge. */
+.sh__gallery .sh__shot img {
+  object-position: left top;
+}
+
+/* Next chapter. */
+.sh__next {
+  margin-top: 56px;
+  border-top: 1px solid var(--line);
+}
+.sh__next > a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 16px;
+  padding: 28px 0 8px;
+}
+.sh__next .wk-count {
+  grid-column: 1 / -1;
+}
+.sh__next-title {
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+}
+.sh__next svg {
+  color: var(--ink-3);
+  transition: transform var(--dur-fast) var(--ease-spring), color 160ms ease;
+}
+.sh__next > a:hover svg {
+  color: var(--accent-ink);
+  transform: translateX(4px);
+}
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 1024px) {
+  /* Big screens: a floating card with air on every side, not a phone sheet stuck to the bottom. */
+  .sh__panel {
+    inset: 28px 0;
+    width: min(1180px, calc(100% - 64px));
+    border-radius: var(--radius-xl);
+  }
+  .sh__head {
+    gap: 40px;
+    padding: 4px 48px 28px;
+  }
+  .sh__intro {
+    font-size: 16px;
+  }
+  .sh__body {
+    padding: 8px 48px 64px;
+  }
+  .sh__grid {
+    gap: 44px 28px;
+  }
+  /* The first build leads: a wide picture with its caption beside it. */
+  .sh__item--lead {
+    grid-column: 1 / -1;
+  }
+  .sh__item--lead > .sh__link {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    align-items: end;
+    gap: 32px;
+  }
+  .sh__item--lead .sh__name {
+    font-size: 22px;
+  }
+  .sh__item--lead .sh__sum {
+    font-size: 15.5px;
+  }
+  .sh__groups {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 48px 40px;
+  }
+}

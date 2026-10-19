@@ -1,0 +1,14 @@
+node_modules
+dist
+*.local
+.env
+.env.*
+!.env.example
+scripts/out/
+
+
+# TypeScript incremental build state
+*.tsbuildinfo
+
+# Planning notes stay on this machine: they name clients.
+docs/superpowers/

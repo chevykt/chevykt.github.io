@@ -1,0 +1,159 @@
+/*
+ * Standalone pages (Showcase, Proof): the shared anatomy.
+ * Same voice as the Home section heads: small-caps eyebrow with a hairline, then a two-tone bold large title.
+ */
+
+.pg {
+  --gutter: clamp(16px, 3.5vw, 56px);
+  container-type: inline-size;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(64px, 11vh, 120px) var(--gutter) clamp(64px, 10vh, 120px);
+  color: var(--ink);
+}
+
+/* The same page run as a Home section (Proof, Showcase after About): a section head the size of
+   the other Home heads, no hairline after the eyebrow. The phone top bar is sticky, so a jump to
+   the section lands below it. */
+.pg--section {
+  scroll-margin-top: 56px;
+}
+.pg--section .pg-eyebrow {
+  font-size: 12px;
+}
+.pg--section .pg-eyebrow > i {
+  display: none;
+}
+.pg--section .pg-title {
+  font-size: clamp(1.7rem, 4.4cqi, 4.2rem);
+  letter-spacing: -0.05em;
+}
+@media (min-width: 1024px) {
+  .pg--section {
+    scroll-margin-top: 0;
+  }
+}
+
+.pg-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 18px;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.pg-eyebrow > i {
+  flex: 1;
+  max-width: 280px;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+/* iOS large title, as in the hero: one weight, the lead-in in grey, the point in ink. */
+.pg-title {
+  display: grid;
+  margin: 0;
+  color: var(--ink-3);
+  font-size: clamp(2rem, 6.2cqi, 5.4rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.pg-title > b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.pg-lede {
+  margin: 22px 0 0;
+  max-width: 58ch;
+  color: var(--ink-2);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.pg-h2 {
+  margin: 0 0 18px;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pg-mono {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Square-cornered outline button: the one primary action on the page. */
+.pg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: var(--surface);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-rim), var(--glass-drop);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition:
+    border-color var(--dur-fast) var(--ease-spring),
+    background-color var(--dur-fast) var(--ease-spring);
+}
+.pg-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.pg-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Round play button over a poster (clips, the film under reduced motion). 68px, well over 44. */
+.pg-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  margin: -34px 0 0 -34px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--media-scrim);
+  color: var(--on-media);
+  box-shadow: 0 10px 30px -8px rgb(0 0 0 / 0.6);
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+.pg-play:hover {
+  transform: scale(1.06);
+}
+.pg-play:active {
+  transform: scale(0.96);
+  transition-duration: var(--dur-press);
+}
+.pg-play:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.pg-play > svg {
+  margin-left: 3px;
+}

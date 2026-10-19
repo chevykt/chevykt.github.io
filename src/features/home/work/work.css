@@ -1,0 +1,315 @@
+/*
+ * Home Work section: the bento of chapters. Also home to the section-head classes (.wk-eyebrow, .wk-title,
+ * .wk-count) the other Home sections share, and the chapter logo face (.wa__face).
+ */
+
+.wk {
+  --gutter: clamp(16px, 3.5vw, 56px);
+  container-type: inline-size;
+  position: relative;
+  /* The phone top bar is sticky, so a jump to #work lands below it. */
+  scroll-margin-top: 56px;
+}
+
+@media (min-width: 1024px) {
+  .wk {
+    scroll-margin-top: 0;
+  }
+}
+
+.wk-eyebrow {
+  margin: 0 0 18px;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.wk-title {
+  margin: 0;
+  color: var(--ink-3);
+  font-size: clamp(1.7rem, 4.4cqi, 4.2rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+}
+.wk-title__bold {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.wk-count {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- The bento ---------- */
+
+.wb {
+  padding: clamp(64px, 10vh, 112px) var(--gutter);
+}
+.wb__head {
+  margin-bottom: clamp(28px, 5vh, 48px);
+}
+.wb__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(3, clamp(150px, 14.5cqi, 210px));
+  grid-template-areas:
+    'cli cli cli cli cli cli cli pro pro pro pro pro'
+    'cli cli cli cli cli cli cli pro pro pro pro pro'
+    'my  my  my  my  aca aca aca aca ths ths ths ths';
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.wb__cell[data-area='client-tools'] { grid-area: cli; }
+.wb__cell[data-area='products'] { grid-area: pro; }
+.wb__cell[data-area='my-tools'] { grid-area: my; }
+.wb__cell[data-area='academic'] { grid-area: aca; }
+.wb__cell[data-area='this-site'] { grid-area: ths; }
+
+.wb__cell {
+  min-width: 0;
+  min-height: 0;
+}
+/*
+ * The tile = "A Clean frame": a soft hairline edge,
+ * the picture inset evenly with matching corners, name and count on one line in plain text, pictures
+ * softened on dark.
+ */
+.wb__tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: clip;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform var(--dur-slow) var(--ease-spring),
+    box-shadow var(--dur-slow) var(--ease-spring);
+}
+/* The edge draws over the picture (a pseudo on top), so it stays crisp on any capture. */
+.wb__tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  pointer-events: none;
+}
+.wb__tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.wb__media {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin: 10px 10px 0;
+  overflow: clip;
+  border-radius: calc(var(--radius-xl) - 10px);
+  background: var(--surface-2);
+}
+/* A hairline on the picture's own edge, so a white capture never melts into a white tile. */
+.wb__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.wb__media > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  transition: transform var(--dur-slow) var(--ease-spring);
+}
+/* White captures on Onyx are softened so they do not glare. */
+:root[data-theme='dark'] .wb__media > img {
+  filter: brightness(0.86);
+}
+.wb__cap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 12px;
+  padding: 12px 16px 14px;
+}
+.wb__cap .wk-count {
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+/* Names wrap (never clip): a narrow tile gives the picture's height to a second line. */
+.wb__cap > b {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+@media (hover: hover) and (pointer: fine) {
+  .wb__tile:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-float);
+  }
+  .wb__tile:hover .wb__media > img {
+    transform: scale(1.04);
+  }
+}
+@container (max-width: 700px) {
+  .wb__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 220px 180px 170px;
+    grid-template-areas:
+      'cli cli'
+      'pro my'
+      'aca ths';
+    gap: 10px;
+  }
+}
+
+/* Tiles rise in as they scroll into view (CSS view timeline, compositor only; still under reduced motion). */
+@keyframes wb-rise {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .wb__cell {
+      animation: wb-rise linear both;
+    }
+    .wb .wb__cell {
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+/*
+ * Parallax: each capture is the deeper layer and drifts inside its frame while the tile crosses the
+ * screen. The picture is 110% tall with 5%
+ * spare above and below; the drift is +-4% of its height, so no edge ever shows. `translate`, not
+ * `transform`, so the hover zoom composes with it. Compositor only; off under reduced motion.
+ */
+@keyframes wb-drift {
+  from {
+    translate: 0 -4%;
+  }
+  to {
+    translate: 0 4%;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .wb__media > img {
+      top: -5%;
+      height: 110%;
+      animation: wb-drift linear both;
+    }
+    .wb .wb__media > img {
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+
+/* ---------- Chapter logo face: the logos as embossed app icons on paper (sized in cqw) ---------- */
+
+.wa__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  /* Embossed paper: a soft fall of light, a lit top edge and a shaded bottom edge. */
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  box-shadow: inset 0 1.5px 0 var(--paper-light), inset 0 -2px 6px var(--paper-bevel);
+  color: var(--paper-ink);
+  container-type: inline-size;
+}
+.wa__marks {
+  position: relative;
+  flex: 1;
+  display: grid;
+  place-items: center;
+}
+.wa__tile {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 30cqw;
+  aspect-ratio: 1;
+  border-radius: 24%;
+  /* A raised key: lit from above, a bevel along the bottom, resting on its own shadow. */
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  box-shadow:
+    var(--paper-tile-shadow),
+    inset 0 1.5px 0 var(--paper-light),
+    inset 0 -2px 0 var(--paper-bevel),
+    inset 0 0 0 1px var(--paper-line);
+}
+.wa__tile > img {
+  width: 56%;
+  height: 56%;
+  object-fit: contain;
+  /* Pressed into the key: a light rim under each logo edge. */
+  filter: drop-shadow(0 1px 0 var(--paper-light)) drop-shadow(0 -0.5px 0 var(--paper-bevel));
+}
+/* Solo: one large mark. */
+.wa__face[data-layout='solo'] .wa__tile {
+  width: 42cqw;
+}
+/* Fan: three tiles, the middle one leads. */
+.wa__face[data-layout='fan'] .wa__tile:nth-child(1) {
+  transform: translate(-22cqw, 4cqw) rotate(-11deg);
+}
+.wa__face[data-layout='fan'] .wa__tile:nth-child(2) {
+  z-index: 1;
+  width: 34cqw;
+  transform: translateY(-3cqw);
+}
+.wa__face[data-layout='fan'] .wa__tile:nth-child(3) {
+  transform: translate(22cqw, 4cqw) rotate(11deg);
+}
+/* Badge: one large mark with a small one on its corner. */
+.wa__face[data-layout='badge'] .wa__tile:nth-child(1) {
+  width: 42cqw;
+}
+.wa__face[data-layout='badge'] .wa__tile:nth-child(2) {
+  z-index: 1;
+  width: 17cqw;
+  transform: translate(16cqw, 15cqw);
+}
+.wa__face-foot {
+  display: grid;
+  gap: 3cqw;
+  padding: 0 9cqw 10cqw;
+}
+.wa__face-foot > b {
+  font-size: 7.6cqw;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-shadow: 0 1px 0 var(--paper-light);
+}
+.wa__face-foot > span {
+  color: var(--paper-ink-3);
+  text-shadow: 0 1px 0 var(--paper-light);
+  font-size: 4.2cqw;
+  line-height: 1.5;
+}

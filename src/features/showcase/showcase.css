@@ -1,0 +1,338 @@
+/*
+ * Showcase page, "the film stage". The rooms hold and walk under the WALK query in
+ * rooms-scene.ts (keep both in sync); outside it every room stacks as screen + caption, no JS needed.
+ */
+
+.kt-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 22px;
+  margin-top: 28px;
+}
+.kt-foot {
+  margin: 0;
+  color: var(--ink-3);
+  font-size: 13px;
+}
+
+/* ---------- Browser window ---------- */
+
+.kt-window {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow:
+    var(--shadow-float),
+    inset 0 0 0 1px var(--line);
+}
+.kt-window__bar {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 280px) 1fr;
+  align-items: center;
+  gap: 14px;
+  height: 38px;
+  padding: 0 8px 0 14px;
+  border-bottom: 1px solid var(--line);
+}
+.kt-window__dots {
+  display: flex;
+  gap: 6px;
+}
+.kt-window__dots > i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+.kt-window__url {
+  overflow: hidden;
+  padding: 4px 10px;
+  border-radius: 7px;
+  background: var(--surface-2);
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kt-window__action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.kt-screen {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--paper-2);
+}
+.kt-screen > img,
+.kt-screen > video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* The film's pause / play: a 14px glyph in a 44px-wide hit area, the bar's full height. */
+.kt-film__toggle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 38px;
+  margin-right: -8px;
+  border: 0;
+  background: none;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-spring);
+}
+.kt-film__toggle:hover {
+  color: var(--ink);
+}
+.kt-film__toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
+
+.kt-film {
+  margin-top: clamp(40px, 7vh, 72px);
+}
+/* Parallax: the film is the deeper layer and moves a little slower than the page. 24px each way stays
+   inside the 40px+ gaps above and below it. Compositor only; off under reduced motion. */
+@keyframes kt-film-drift {
+  from {
+    translate: 0 -24px;
+  }
+  to {
+    translate: 0 24px;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .kt-film {
+      animation: kt-film-drift linear both;
+    }
+    .kt .kt-film {
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+
+/* ---------- Stats strip ---------- */
+
+.kt-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: clamp(40px, 6vh, 64px) 0 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.kt-stats > div {
+  padding: 22px 0 20px;
+}
+.kt-stats > div + div {
+  padding-left: 22px;
+  border-left: 1px solid var(--line);
+}
+.kt-stats dt {
+  font-size: clamp(2rem, 4cqi, 3.2rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+.kt-stats dd {
+  margin: 8px 0 0;
+}
+
+/* ---------- The five rooms: stacked (phones, short screens, reduced motion) ---------- */
+
+.kt-rooms {
+  margin-top: clamp(56px, 9vh, 96px);
+}
+.kt-rooms__list,
+.kt-rooms__rule {
+  display: none;
+}
+.kt-rooms__panes {
+  display: grid;
+  gap: clamp(40px, 7vh, 64px);
+}
+.kt-room {
+  margin: 0;
+}
+.kt-room figcaption {
+  margin-top: 18px;
+}
+.kt-room :is(h3, h4) {
+  margin: 6px 0 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.kt-room p {
+  margin: 8px 0 0;
+  max-width: 60ch;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ---------- The five rooms: held while the scroll walks them ---------- */
+
+@media (min-width: 1024px) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .kt-rooms {
+    /* One screen, plus a stretch of scroll per room after the first. */
+    height: calc(100svh + (var(--n) - 1) * 55svh);
+    margin-top: clamp(24px, 4vh, 48px);
+  }
+  .kt-rooms__pin {
+    position: sticky;
+    top: 0;
+    display: grid;
+    grid-template-columns: minmax(200px, 250px) minmax(0, 1fr);
+    gap: clamp(28px, 4cqi, 56px);
+    align-items: center;
+    height: 100svh;
+  }
+  .kt-rooms__nav {
+    position: relative;
+  }
+  .kt-rooms__list {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    padding: 0 0 0 20px;
+    list-style: none;
+  }
+  .kt-rooms__list button {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 0;
+    border: 0;
+    background: none;
+    color: var(--ink-3);
+    font: inherit;
+    font-size: 19px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    text-align: left;
+    cursor: pointer;
+    transition: color var(--dur-base) var(--ease-spring);
+  }
+  .kt-rooms__list button:hover,
+  .kt-rooms__list button[aria-current='true'] {
+    color: var(--ink);
+  }
+  .kt-rooms__list button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .kt-rooms__list small {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+  /* The hairline beside the list fills down with the walk. */
+  .kt-rooms__rule {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    width: 1px;
+    height: calc(100% - 29px);
+    background: var(--line);
+  }
+  .kt-rooms__rule > i {
+    display: block;
+    height: 100%;
+    background: var(--ink);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  /* All five screens share one cell; the lit one rises in, the rest wait hidden. */
+  .kt-rooms__panes {
+    display: grid;
+    gap: 0;
+    /* Keep window + caption inside the held screen on shorter desktops. */
+    max-width: calc((100svh - 300px) * 16 / 9);
+    width: 100%;
+    justify-self: center;
+  }
+  .kt-room {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px);
+    transition:
+      opacity var(--dur-base) var(--ease-out),
+      transform var(--dur-slow) var(--ease-spring),
+      visibility 0s linear var(--dur-base);
+  }
+  .kt-room[data-on] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+}
+
+/* ---------- Questions ---------- */
+
+.kt-faq {
+  display: grid;
+  gap: 0 clamp(28px, 4cqi, 56px);
+  margin-top: clamp(64px, 10vh, 112px);
+  padding-top: clamp(32px, 5vh, 48px);
+  border-top: 1px solid var(--line);
+}
+.kt-faq dl {
+  margin: 0;
+}
+.kt-faq dl > div {
+  padding: 0 0 26px;
+}
+.kt-faq dl > div + div {
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+.kt-faq dt {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.kt-faq dd {
+  margin: 8px 0 0;
+  max-width: 64ch;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+}
+@media (min-width: 1024px) {
+  .kt-faq {
+    grid-template-columns: minmax(200px, 250px) minmax(0, 1fr);
+  }
+}
+
+/* ---------- Phones ---------- */
+
+@container (max-width: 640px) {
+  .kt-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .kt-stats > div:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .kt-stats > div:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+}

@@ -1,0 +1,126 @@
+/*
+ * Proof page, "the ledger": hairline bands, each with a label that holds (CSS sticky) while
+ * its record scrolls past. Phones: the label sits on top of its band instead.
+ */
+
+.pf-ledger {
+  margin-top: clamp(40px, 7vh, 72px);
+}
+
+.pf-band {
+  display: grid;
+  gap: 18px clamp(24px, 4cqi, 56px);
+  padding: clamp(36px, 6vh, 56px) 0;
+  border-top: 1px solid var(--line);
+}
+.pf-band__label :is(h2, h3) {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.pf-band__label .pg-mono {
+  display: block;
+  margin-top: 6px;
+}
+.pf-band__body {
+  min-width: 0;
+}
+
+@container (min-width: 761px) {
+  .pf-band {
+    grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
+  }
+  .pf-band__label {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+  }
+}
+
+/* ---------- On camera ---------- */
+
+/* ---------- Receipts: a build, the fact, how it was checked ---------- */
+
+.pf-receipts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pf-receipt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.pf-receipt:first-child {
+  padding-top: 0;
+}
+.pf-receipt__build {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.pf-receipt__fact {
+  margin: 0;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+}
+.pf-receipt__detail {
+  margin: 0;
+  color: var(--ink-3);
+}
+@media (min-width: 768px) {
+  .pf-receipt {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 20px;
+    align-items: baseline;
+  }
+}
+
+.pf-quote {
+  display: grid;
+  gap: 10px 28px;
+  margin: 0;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.pf-quote:first-child {
+  padding-top: 0;
+}
+/* The next band's top rule closes the record. */
+.pf-quote:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+.pf-quote > p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.pf-quote > footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  align-items: baseline;
+}
+.pf-quote cite {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+}
+@container (min-width: 761px) {
+  .pf-quote {
+    grid-template-columns: minmax(0, 1fr) 160px;
+  }
+  .pf-quote > footer {
+    display: grid;
+    align-content: start;
+    gap: 4px;
+    text-align: right;
+  }
+}
+

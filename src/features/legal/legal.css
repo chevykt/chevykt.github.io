@@ -1,0 +1,23 @@
+/* Privacy and Terms: hairline-separated sections at a reading measure, under the shared page head. */
+
+.lg-body {
+  max-width: 68ch;
+  margin-top: clamp(40px, 7vh, 64px);
+  border-top: 1px solid var(--line);
+}
+.lg-body > section {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+}
+.lg-body h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.lg-body p {
+  margin: 10px 0 0;
+  color: var(--ink-2);
+  font-size: 15.5px;
+  line-height: 1.65;
+}

@@ -1,0 +1,335 @@
+/*
+ * Contact, "answers, then write": the answers plate
+ * (5 parts) beside the form panel (7 parts); one column under 820px of container.
+ */
+
+.ct-sheet {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 16px;
+  margin-top: clamp(40px, 7vh, 56px);
+}
+.ct-plate,
+.ct-panel {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+.ct-plate {
+  padding: 28px 28px 24px;
+  background: var(--surface-2);
+}
+.ct-panel {
+  padding: 32px;
+  background: var(--surface);
+}
+.ct-plate__title {
+  margin: 12px 0 0;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+.ct-plate__title > span {
+  display: block;
+  color: var(--ink-3);
+  font-weight: 700;
+}
+
+/* ---------- The answers: one open at a time (details name="contact-faq") ---------- */
+
+.ct-acc {
+  margin-top: 24px;
+  border-top: 1px solid var(--line-strong);
+}
+.ct-acc > details {
+  border-bottom: 1px solid var(--line-strong);
+}
+.ct-acc summary {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 13px 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  list-style: none;
+  cursor: pointer;
+}
+.ct-acc summary::-webkit-details-marker {
+  display: none;
+}
+.ct-acc summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.ct-acc summary > svg {
+  color: var(--ink-3);
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+.ct-acc details[open] summary > svg {
+  transform: rotate(180deg);
+}
+.ct-idx {
+  color: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.ct-acc details > p {
+  margin: 0;
+  padding: 0 24px 18px 38px;
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+@keyframes ct-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ct-acc details[open] > p {
+    animation: ct-rise var(--dur-fast) var(--ease-spring) both;
+  }
+}
+
+.ct-direct {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 28px;
+}
+.ct-mail {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 44px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.ct-mail:hover {
+  color: var(--accent-ink);
+}
+
+/* ---------- The form panel ---------- */
+
+.ct-panel__title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+.ct-panel__body {
+  margin: 8px 0 0;
+  max-width: 46ch;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.ct-form,
+.ct-done {
+  margin-top: 28px;
+}
+.ct-form {
+  display: grid;
+  gap: 18px;
+}
+.ct-row2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+}
+.ct-field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.ct-field > span {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ct-field > :is(input, textarea) {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px; /* under 16px, iOS Safari zooms the page on focus */
+  line-height: 1.4;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.ct-field > :is(input, textarea)::placeholder {
+  color: var(--ink-3);
+}
+.ct-field > :is(input, textarea):focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.ct-field > [aria-invalid='true'] {
+  border-color: var(--accent-ink);
+}
+.ct-field > textarea {
+  min-height: 132px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.ct-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+/* The one primary action on the page: a solid ink capsule, the iOS filled button. */
+.ct-send {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 14px 26px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: box-shadow 180ms ease, transform var(--dur-press) ease-out;
+}
+.ct-send:active {
+  transform: scale(0.97);
+}
+.ct-send:hover {
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+.ct-send:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.ct-send > svg {
+  transition: transform var(--dur-press) ease-out;
+}
+.ct-send:active > svg {
+  transform: translate(2px, -2px);
+}
+.ct-hint {
+  color: var(--ink-3);
+  font-size: 13px;
+}
+.ct-err {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  font-size: 13px;
+}
+.ct-err > svg {
+  color: var(--accent-ink);
+}
+@keyframes ct-shake {
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ct-send.is-shaking {
+    animation: ct-shake 360ms var(--ease-spring);
+  }
+}
+
+.ct-done {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 12px;
+}
+.ct-done > svg {
+  color: var(--accent-ink);
+}
+.ct-done > :is(h3, h4) {
+  margin: 4px 0 0;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  outline: none;
+}
+.ct-done > p {
+  margin: 0;
+  max-width: 44ch;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.ct-done > .ct-done__fallback {
+  font-size: 14px;
+}
+.ct-done__fallback > a {
+  color: var(--ink);
+  font-weight: 600;
+}
+.ct-done__fallback > a:hover {
+  color: var(--accent-ink);
+}
+.ct-done__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ct-done {
+    animation: ct-rise var(--dur-base) var(--ease-spring) both;
+  }
+}
+
+/* ---------- Narrow columns ---------- */
+
+@container (max-width: 820px) {
+  .ct-sheet {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@container (max-width: 560px) {
+  .ct-sheet {
+    margin-top: 40px;
+  }
+  .ct-plate,
+  .ct-panel {
+    padding: 24px 20px;
+    border-radius: var(--radius-lg);
+  }
+  .ct-row2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

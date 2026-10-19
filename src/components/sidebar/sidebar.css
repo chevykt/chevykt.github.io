@@ -1,0 +1,590 @@
+/*
+ * Sidebar. Geometry rule: every icon is centered on x = 38px, the middle of the 76px rail,
+ * so collapsing never moves an icon - the card is clipped around it.
+ * Motion: transform, opacity and clip-path only, on the solved spring curves in tokens.css.
+ */
+
+/* ---------- Card (shared by the desktop float and the phone drawer) ---------- */
+
+.sb-panel,
+.sb-float {
+  /* The clock line above the logo: 16px line + 10px gap. The band and the collapse toggle follow it. */
+  --clock-h: 26px;
+}
+
+.sb-panel {
+  --item-h: 40px;
+  --icon-x: 28px; /* left edge of every 20px icon: (76 - 20) / 2 */
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-w);
+  max-height: 100%;
+  padding-bottom: 14px;
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  background: var(--surface);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-rim), var(--glass-drop);
+  border-radius: 28px;
+  color: var(--ink);
+}
+
+/* Labels leave fast and arrive a beat after the card has opened. */
+.sb-fade {
+  transition: opacity 240ms var(--ease-out) 90ms;
+}
+.sb-panel[data-collapsed='true'] .sb-fade {
+  opacity: 0;
+  transition: opacity 110ms ease-out;
+}
+
+/* ---------- Header: centered logo on a soft band, big picture with a blue check ---------- */
+
+.sb-head {
+  --pic: 112px;
+
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 16px 12px;
+  text-align: center;
+}
+
+/* The band ends at the picture's middle, so the picture overlaps its edge. */
+.sb-head::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(18px + var(--clock-h) + 32px + 18px + var(--pic) / 2);
+  background: var(--band);
+  transition: opacity 240ms var(--ease-out) 60ms;
+}
+
+/* Your local time, live, on the band above the logo. Fades out on the rail like every label. */
+.sb-clock {
+  position: relative;
+  height: 16px;
+  margin: 0 0 calc(var(--clock-h) - 16px);
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+}
+.sb-clock > time {
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.sb-logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 32px;
+  font-size: 15px;
+  font-weight: 620;
+  letter-spacing: -0.015em;
+  border-radius: var(--radius-sm);
+}
+
+.sb-logo__mark {
+  display: block;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+.sb-logo__mark > img {
+  width: 100%;
+  height: 100%;
+}
+/* The second half of the brand name takes the accent in both themes (a logotype, aria-hidden: the link carries the name). */
+.sb-logo__accent {
+  color: var(--accent);
+}
+
+/* Socials: sit under the role where search used to be. Fade out (and stop taking clicks) on the rail. */
+.sb-socials {
+  position: relative;
+  margin: 14px auto 0;
+}
+/* Hidden on the rail: no clicks and no Tab stops (visibility waits for the fade to finish). */
+.sb-panel[data-collapsed='true'] .sb-socials {
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity 110ms ease-out,
+    visibility 0s linear 110ms; /* keeps .sb-fade's fade, then leaves the Tab order */
+}
+
+.sb-profile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 18px;
+  border-radius: var(--radius-md);
+}
+
+.sb-pic {
+  position: relative;
+  display: block;
+  width: var(--pic);
+  height: var(--pic);
+  transform-origin: top center;
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+
+.sb-pic__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--surface-2);
+  box-shadow: 0 0 0 4px var(--surface);
+  transition: box-shadow 180ms ease, transform var(--dur-press) ease-out;
+}
+.sb-profile:hover .sb-pic__img {
+  box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px var(--accent);
+}
+/* Press feedback on the image, never on .sb-pic: that one carries the rail transform. */
+.sb-profile:active .sb-pic__img {
+  transform: scale(0.97);
+}
+
+/* Blue verified check: the seal's cut-out check shows a white disc, ringed in the card color. */
+.sb-pic__check {
+  position: absolute;
+  z-index: 1;
+  right: 2%;
+  bottom: 2%;
+  display: grid;
+  place-items: center;
+  width: 30%;
+  height: 30%;
+  color: var(--accent);
+}
+.sb-pic__check::before {
+  content: '';
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background: var(--on-accent);
+}
+.sb-pic__check::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: 50%;
+  background: var(--surface);
+}
+.sb-pic__check > svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.sb-profile__name {
+  margin-top: 12px;
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+.sb-profile__role {
+  margin-top: 2px;
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+/* The drawer's close button, pinned top right over the band. */
+.sb-head__action {
+  position: absolute;
+  top: 10px;
+  right: 8px;
+}
+
+/* On the rail: the band fades, the mark and picture slide (and the picture shrinks) onto x = 38. */
+.sb-panel[data-collapsed='true'] .sb-head::before {
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+.sb-panel[data-collapsed='true'] .sb-logo__mark {
+  transform: translateX(var(--mark-x, 0px));
+}
+.sb-panel[data-collapsed='true'] .sb-pic {
+  transform: translateX(var(--pic-x, 0px)) scale(var(--pic-scale, 1));
+}
+
+/* Everything under the header rides up by --dy on the rail (the card's bottom clips in to match). */
+.sb-body {
+  display: flex;
+  flex-direction: column; /* search and separator stretch to the card width, as before */
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+.sb-panel[data-collapsed='true'] .sb-body {
+  transform: translateY(calc(var(--dy, 0px) * -1));
+}
+
+/* A hairline that shrinks to a 20px tick on the rail instead of being cut by the clip. */
+.sb-sep {
+  flex: none;
+  height: 1px;
+  margin: 8px 20px 4px var(--icon-x);
+  background: var(--line);
+  transform-origin: left center;
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+.sb-panel[data-collapsed='true'] .sb-sep {
+  transform: scaleX(calc(20 / 224));
+}
+
+/* ---------- Nav ---------- */
+
+.sb-list {
+  position: relative;
+}
+
+.sb-group + .sb-group {
+  margin-top: 6px;
+}
+
+.sb-group__label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 34px;
+  padding-left: var(--icon-x);
+  /* Sized for older eyes: 12px, semibold, --ink-2 (7:1 contrast, was 10px --ink-3 at 4.9:1). */
+  color: var(--ink-2);
+  /* iOS grouped-list header: the system face, small caps-height, light tracking. */
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+/* On the rail the group name becomes a short tick, centered under the icons. */
+.sb-group__label::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: var(--icon-x);
+  width: 20px;
+  height: 1px;
+  background: var(--line-strong);
+  opacity: 0;
+  transition: opacity 110ms ease-out;
+}
+.sb-panel[data-collapsed='true'] .sb-group__label::after {
+  opacity: 1;
+  transition: opacity 240ms var(--ease-out) 90ms;
+}
+
+.sb-item {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  height: var(--item-h);
+  padding: 0 20px 0 var(--icon-x);
+  border: 0;
+  background: none;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  text-align: left;
+  white-space: nowrap;
+  transition: color 140ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.sb-item:focus-visible {
+  outline: none; /* the sliding highlight is the focus indicator */
+}
+.sb-item[data-active='true'] {
+  color: var(--accent-ink);
+}
+.sb-item[data-highlighted='true'] {
+  color: var(--accent-ink);
+}
+
+.sb-item__icon {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  transition: transform var(--dur-press) ease-out;
+}
+.sb-item:active .sb-item__icon {
+  transform: scale(0.88);
+}
+
+.sb-item__ext {
+  flex: none;
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+/* Hover highlight: a light tile inset from the
+   edges that exists only under the pointer, glides between rows, and fades out in place. */
+.sb-indicator {
+  position: absolute;
+  top: 0;
+  left: 8px;
+  z-index: 0;
+  width: calc(100% - 16px);
+  height: var(--item-h);
+  border-radius: 10px;
+  background: var(--accent-soft);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform;
+  transition: opacity 200ms ease;
+}
+.sb-indicator[data-visible='true'] {
+  opacity: 1;
+}
+.sb-indicator[data-ready='true'] {
+  transition: transform var(--dur-fast) var(--ease-spring), opacity 200ms ease;
+}
+/* On the rail the tile hugs the icon instead of running into the clip edge. */
+.sb-panel[data-collapsed='true'] .sb-indicator {
+  left: 12px;
+  width: 52px;
+}
+
+.sb-badge {
+  display: grid;
+  flex: none;
+  place-items: center;
+  min-width: 24px;
+  height: 20px;
+  margin-left: auto;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  transition: opacity 240ms var(--ease-out) 90ms, background-color 140ms ease, color 140ms ease;
+}
+.sb-item[data-highlighted='true'] .sb-badge {
+  background: var(--surface);
+}
+
+/* On the rail the badge becomes a dot on the icon. */
+.sb-dot {
+  position: absolute;
+  top: -2px;
+  right: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--surface);
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 110ms ease-out, transform 110ms ease-out;
+}
+.sb-panel[data-collapsed='true'] .sb-dot {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 200ms ease 120ms, transform var(--dur-fast) var(--ease-spring) 120ms;
+}
+
+/* Theme switch */
+.sb-switch {
+  position: relative;
+  flex: none;
+  width: 34px;
+  height: 20px;
+  margin-left: auto;
+  border-radius: 10px;
+  background: var(--surface-3);
+  transition: opacity 240ms var(--ease-out) 90ms, background-color 200ms ease;
+}
+.sb-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--knob);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+.sb-item[aria-checked='true'] .sb-switch {
+  background: var(--accent);
+}
+.sb-item[aria-checked='true'] .sb-switch::after {
+  transform: translateX(14px);
+}
+
+/* ---------- Desktop float ---------- */
+
+.sb-float {
+  position: fixed;
+  z-index: 40;
+  top: var(--sidebar-gap);
+  left: var(--sidebar-gap);
+  display: flex;
+  width: var(--sidebar-w);
+  /* Full height: the card runs to the bottom gap. */
+  height: calc(100dvh - 2 * var(--sidebar-gap));
+  filter: var(--drop-float);
+  /* The box stays full width when collapsed; only the visible card and toggle take the pointer. */
+  pointer-events: none;
+}
+.sb-float .sb-panel,
+.sb-toggle {
+  pointer-events: auto;
+}
+
+.sb-float .sb-panel {
+  height: 100%;
+  clip-path: inset(0 0 0 0 round var(--radius-xl));
+  transition: clip-path var(--dur-base) var(--ease-spring);
+}
+/* The spare height goes above the General group, which settles at the bottom of the card. On a
+   short screen there is none: the group follows the others and the card scrolls, as before. */
+.sb-float .sb-body,
+.sb-float .sb-body > nav,
+.sb-float .sb-list {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+}
+.sb-float .sb-group:last-child {
+  margin-top: auto;
+  padding-top: 6px;
+}
+.sb-float[data-collapsed='true'] .sb-panel {
+  clip-path: inset(0 calc(var(--sidebar-w) - var(--rail-w)) var(--clip-b, var(--dy, 0px)) 0 round var(--radius-xl));
+}
+
+/* Collapse toggle: sits half outside the card's right edge and rides it. */
+.sb-toggle {
+  position: absolute;
+  z-index: 2;
+  top: calc(20px + var(--clock-h)); /* centered on the logo row, under the clock */
+  left: calc(var(--sidebar-w) - 14px);
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink-2);
+  transition: transform var(--dur-base) var(--ease-spring), color 140ms ease, background-color 140ms ease;
+}
+.sb-toggle:hover {
+  color: var(--accent-ink);
+}
+/* Press feedback goes on the icon: a `scale` on the button itself would compose with its
+   translateX around the untransformed origin and throw it ~20px mid-click, so the release
+   would land outside it and the click would never fire. */
+.sb-toggle > svg {
+  transition: transform var(--dur-base) var(--ease-spring), scale var(--dur-press) ease-out;
+}
+.sb-toggle:active > svg {
+  scale: 0.8;
+}
+.sb-float[data-collapsed='true'] .sb-toggle {
+  transform: translateX(calc(var(--rail-w) - var(--sidebar-w)));
+}
+.sb-float[data-collapsed='true'] .sb-toggle > svg {
+  transform: rotate(180deg);
+}
+
+/* Tooltips: the toggle's own, and the rail's shared one that follows the hovered icon. */
+.sb-toggle__tip,
+.sb-tip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.sb-toggle__tip {
+  top: 50%;
+  left: calc(100% + 10px);
+  transform: translate(-4px, -50%);
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+.sb-toggle__tip kbd {
+  font: inherit;
+  font-size: 11px;
+  opacity: 0.6;
+}
+.sb-toggle:hover .sb-toggle__tip,
+.sb-toggle:focus-visible .sb-toggle__tip {
+  opacity: 1;
+  transform: translate(0, -50%);
+  transition: opacity 160ms ease 250ms, transform var(--dur-fast) var(--ease-spring) 250ms;
+}
+
+.sb-tip {
+  top: 0;
+  left: calc(var(--rail-w) + 12px);
+  transform: translateY(calc(var(--tip-y) - 50%));
+  transition: opacity 120ms ease, transform var(--dur-fast) var(--ease-spring);
+}
+.sb-tip[data-visible='true'] {
+  opacity: 1;
+}
+
+/* ---------- Main content follows the sidebar ---------- */
+
+@media (min-width: 1024px) {
+  .app-main {
+    padding-left: calc(var(--sidebar-w) + 2 * var(--sidebar-gap));
+  }
+  /* Recenters in the freed space with a transform, so collapsing never reflows the page. */
+  .app-main__inner {
+    transition: transform var(--dur-slow) var(--ease-spring);
+  }
+  [data-sidebar='collapsed'] .app-main__inner {
+    transform: translateX(calc((var(--rail-w) - var(--sidebar-w)) / 2));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-float .sb-panel,
+  .sb-toggle,
+  .sb-sep {
+    transition-duration: 1ms;
+  }
+}

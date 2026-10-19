@@ -1,0 +1,320 @@
+/*
+ * Home About, "The floor". The cutout stands on a hairline
+ * floor; the lead overlaps its space. Below 761px of column the picture drops under the lead.
+ */
+
+.ab {
+  --gutter: clamp(16px, 3.5vw, 56px);
+  container-type: inline-size;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: clamp(72px, 12vh, 128px) var(--gutter);
+  /* The phone top bar is sticky, so a jump to #about lands below it. */
+  scroll-margin-top: 56px;
+}
+@media (min-width: 1024px) {
+  .ab {
+    scroll-margin-top: 0;
+  }
+}
+
+.ab__lede {
+  margin: 18px 0 0;
+  max-width: 52ch;
+  color: var(--ink-2);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+/* ---------- The floor ---------- */
+
+.ab__stage {
+  position: relative;
+  min-height: clamp(400px, 47cqi, 560px);
+  margin: clamp(40px, 7vh, 64px) calc(var(--gutter) * -1) 0;
+  padding-inline: var(--gutter);
+}
+/* The floor: a hairline edge to edge, drawn out from under the picture once it has landed. */
+.ab__stage::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: var(--line-strong);
+  transform-origin: right;
+}
+.ab__lead {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  max-width: 16ch;
+  font-size: clamp(28px, 3.7cqi, 48px);
+  font-weight: 650;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+.ab__lead > span {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.ab__pic {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: min(58%, 680px);
+  aspect-ratio: 1200 / 889;
+}
+.ab__pic > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* A photo, not a cutout: a rounded frame with the glass rim, so its dark backdrop reads as a picture. */
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-rim), var(--glass-drop);
+}
+
+/* ---------- Below the floor ---------- */
+
+.ab__below {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(28px, 5cqi, 72px);
+  align-items: start;
+  margin-top: clamp(32px, 5vh, 48px);
+}
+.ab__note {
+  margin: 0;
+  max-width: 54ch;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.65;
+}
+.ab__note > strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.ab__note > a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--dur-fast) var(--ease-spring);
+}
+.ab__note > a:hover {
+  text-decoration-color: var(--ink);
+}
+
+.ab__caps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.ab__cap {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 60px;
+  border-bottom: 1px solid var(--line);
+}
+.ab__cap-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.ab__cap-i {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+/* Tool logos as raised paper keys (the Work card material), overlapping like a stack of tiles. */
+.ab__keys {
+  display: flex;
+}
+.ab__key {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 24%;
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  box-shadow:
+    var(--paper-tile-shadow),
+    inset 0 1.5px 0 var(--paper-light),
+    inset 0 -2px 0 var(--paper-bevel),
+    inset 0 0 0 1px var(--paper-line);
+}
+.ab__key + .ab__key {
+  margin-left: -7px;
+}
+.ab__key > img {
+  width: 58%;
+  height: 58%;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 0 var(--paper-light));
+}
+
+/* ---------- Credentials ---------- */
+
+.ab__creds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 44px;
+  margin-top: 32px;
+}
+.ab__cred {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: none;
+}
+.ab__cred-mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+.ab__cred-mark > img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+.ab__cred-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.ab__cred-copy > b {
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.ab__cred-copy > small {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ab__cred-go {
+  margin-left: auto;
+  color: var(--ink-3);
+  transition:
+    color var(--dur-fast) var(--ease-spring),
+    transform var(--dur-slow) var(--ease-spring);
+}
+a.ab__cred:hover .ab__cred-go {
+  color: var(--ink);
+  transform: translate(2px, -2px);
+}
+a.ab__cred:focus-visible,
+.ab__note > a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- Narrow columns: the picture drops under the lead ---------- */
+
+@container (max-width: 760px) {
+  .ab__stage {
+    min-height: 0;
+  }
+  .ab__lead {
+    max-width: 20ch;
+  }
+  .ab__pic {
+    position: relative;
+    right: auto;
+    width: 100%;
+    margin-top: 20px;
+  }
+  .ab__below {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ab__cap {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    gap: 10px 12px;
+    padding: 14px 0;
+  }
+  .ab__keys {
+    grid-row: 2;
+    grid-column: 1;
+  }
+  .ab__cap-i {
+    grid-row: 1;
+    grid-column: 2;
+  }
+}
+
+/* ---------- Scroll-in: the picture rises onto the floor, the floor draws out ---------- */
+
+@keyframes ab-rise {
+  from {
+    opacity: 0;
+    transform: translateY(48px);
+  }
+}
+@keyframes ab-floor {
+  from {
+    transform: scaleX(0);
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ab__pic {
+      animation: ab-rise linear both;
+    }
+    /* Lands the moment the whole picture is on screen. */
+    .ab .ab__pic {
+      animation-timeline: view();
+      animation-range: entry 10% entry 100%;
+    }
+    .ab__stage::after {
+      animation: ab-floor linear both;
+    }
+    /* The floor is the stage's bottom edge: it can only be seen from contain 0%, so it draws after that. */
+    .ab .ab__stage::after {
+      animation-timeline: --ab-stage;
+      animation-range: contain 0% contain 35%;
+    }
+    .ab .ab__stage {
+      view-timeline-name: --ab-stage;
+    }
+    /* Parallax: the lead is the near layer and floats up over the picture, which stays planted on
+       its floor. Wide columns only: below 761px the picture sits under the lead with 20px between. */
+    .ab__lead {
+      animation: ab-lead-drift linear both;
+    }
+    .ab .ab__stage .ab__lead {
+      animation-timeline: --ab-stage;
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+@keyframes ab-lead-drift {
+  from {
+    translate: 0 32px;
+  }
+  to {
+    translate: 0 -32px;
+  }
+}
+@container (max-width: 760px) {
+  .ab .ab__stage .ab__lead {
+    animation-name: none;
+  }
+}

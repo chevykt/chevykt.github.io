@@ -61,7 +61,7 @@
   grid-template-areas:
     'cli cli cli cli cli cli cli pro pro pro pro pro'
     'cli cli cli cli cli cli cli pro pro pro pro pro'
-    'my  my  my  my  aca aca aca aca ths ths ths ths';
+    'my  my  my  my  my  my  ths ths ths ths ths ths';
   gap: 12px;
   margin: 0;
   padding: 0;
@@ -70,7 +70,6 @@
 .wb__cell[data-area='client-tools'] { grid-area: cli; }
 .wb__cell[data-area='products'] { grid-area: pro; }
 .wb__cell[data-area='my-tools'] { grid-area: my; }
-.wb__cell[data-area='academic'] { grid-area: aca; }
 .wb__cell[data-area='this-site'] { grid-area: ths; }
 
 .wb__cell {
@@ -177,7 +176,7 @@
     grid-template-areas:
       'cli cli'
       'pro my'
-      'aca ths';
+      'ths ths';
     gap: 10px;
   }
 }

@@ -85,7 +85,7 @@ export const clientTools: WorkItem[] = [
   },
 ]
 
-/* ---------- Products, my own tools, academic, this site ---------- */
+/* ---------- Products, my own tools and earlier builds, this site ---------- */
 
 export const govrate: WorkItem = {
   id: 'govrate',
@@ -109,25 +109,24 @@ export const autoEditor: WorkItem = {
   image: shot('auto-editor', 'Script-matched auto-editor'),
 }
 
-export const academic: WorkItem[] = [
+/** Earlier builds, shown with my own tools. */
+export const earlyBuilds: WorkItem[] = [
   {
     id: 'baonbuddy',
     name: 'BaonBuddy',
-    kicker: 'Team lead · Academic',
+    kicker: 'Team lead · 2026',
     summary:
       'Allowance and expense tracker for Filipino college students, with weekly budget math. I led the four-person team and built the authentication, sessions and database.',
     stack: 'PHP · MySQL · Bootstrap',
-    status: 'Academic',
     image: shot('baonbuddy', 'BaonBuddy budget dashboard'),
   },
   {
     id: 'mutagen-arena',
     name: 'Mutagen Arena',
-    kicker: 'AI case study · Academic',
+    kicker: 'Evolving AI · 2026',
     summary:
-      'Top-down survival arena where the enemies evolve against the player using a genetic algorithm and simulated annealing. Built as the case study for an intro to AI course.',
+      'Top-down survival arena where the enemies evolve against the player using a genetic algorithm and simulated annealing. A case study in evolutionary AI.',
     stack: 'Python · Genetic algorithms',
-    status: 'Academic',
     image: shot('mutagen-arena', 'Mutagen Arena gameplay'),
   },
 ]
@@ -145,5 +144,5 @@ export const thisSite: WorkItem = {
 }
 
 /** Every build on the site and the ones made for clients. Derived, never typed in. */
-export const workCount = clientTools.length + 1 + 1 + academic.length + 1
+export const workCount = clientTools.length + 1 + 1 + earlyBuilds.length + 1
 export const clientToolCount = clientTools.length

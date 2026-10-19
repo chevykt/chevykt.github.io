@@ -1,6 +1,6 @@
 import type { WorkChapter } from './schema'
 import { method } from './method'
-import { academic, autoEditor, clientToolCount, clientTools, govrate, repos, thisSite, workCount } from './work'
+import { autoEditor, clientToolCount, clientTools, earlyBuilds, govrate, repos, thisSite, workCount } from './work'
 
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
 /** A count as a word ("twelve"), so copy that quotes a count follows the data. Past twenty it stays a numeral. */
@@ -102,21 +102,11 @@ export const workChapters: WorkChapter[] = [
   {
     id: 'my-tools',
     title: 'Tools I use myself',
-    line: 'Built for my own recordings.',
-    count: 1,
-    unit: 'tool',
-    description: 'A script-matched auto-editor that cuts dead air and stutters from my tutorial recordings and keeps the ad-libs.',
-    items: [autoEditor],
-    lead: autoEditor.image,
-  },
-  {
-    id: 'academic',
-    title: 'Academic',
-    line: 'Computer science projects from PUP.',
-    count: academic.length,
-    unit: 'projects',
-    description: 'Two projects from the Polytechnic University of the Philippines: a student budget tracker and a game whose enemies evolve.',
-    items: academic,
+    line: 'My own tools and earlier builds.',
+    count: 1 + earlyBuilds.length,
+    unit: 'builds',
+    description: 'The auto-editor I run on my own recordings, plus two earlier builds: a budget tracker I led a team on and a game whose enemies evolve.',
+    items: [autoEditor, ...earlyBuilds],
   },
   {
     id: 'this-site',

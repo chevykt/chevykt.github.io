@@ -57,7 +57,7 @@ export type MethodStep = {
   inputs: string[]
 }
 
-export type BuildStatus = 'Live' | 'Delivered' | 'In use' | 'In development' | 'Academic'
+export type BuildStatus = 'Live' | 'Delivered' | 'In use' | 'In development'
 
 /** One chapter of the Home Work section: a group of builds with its covers. */
 export type WorkChapter = {

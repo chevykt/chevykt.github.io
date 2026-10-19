@@ -83,8 +83,8 @@ const browser = await chromium.launch()
   await shot(page, 'desk-bento')
 
   const b = await bento(page)
-  check(b.count === 5 && new Set(b.hrefs).size === 5 && b.hrefs.every((h) => h.startsWith('/work/')), `5 tiles, each a link to its chapter (${b.hrefs.join(' ')})`)
-  check(b.titles.join(' | ') === 'Client tools | Products | Tools I use myself | Academic | This site', `Keon's five chapters (${b.titles.join(' | ')})`)
+  check(b.count === 4 && new Set(b.hrefs).size === 4 && b.hrefs.every((h) => h.startsWith('/work/')), `4 tiles, each a link to its chapter (${b.hrefs.join(' ')})`)
+  check(b.titles.join(' | ') === 'Client tools | Products | Tools I use myself | This site', `Keon's four chapters (${b.titles.join(' | ')})`)
   check(b.edges.length === 1 && b.edges[0] === '0px rgba(255, 255, 255, 0.14) 0px 0px 0px 1px inset', `dark: every tile has the soft hairline edge (${b.edges})`)
   check(b.biggest === '/work/client-tools', `Client tools (7 builds) is the biggest tile (${b.biggest})`)
   const badge = await page.$eval('[data-nav-id="work"]', (el) => el.textContent.match(/\d+/)?.[0])
@@ -131,11 +131,11 @@ const browser = await chromium.launch()
   check(s.path === '/' && !s.open, 'browser Back closes the sheet')
 
   // Direct visit: the sheet opens with Home behind it; closing leaves Home.
-  await page.goto(`${BASE}/work/academic`, { waitUntil: 'domcontentloaded' })
+  await page.goto(`${BASE}/work/my-tools`, { waitUntil: 'domcontentloaded' })
   await page.waitForTimeout(1600)
   s = await read(page)
-  check(s.open && s.title.startsWith('Academic'), 'direct /work/academic opens its sheet')
-  await shot(page, 'desk-direct-academic')
+  check(s.open && s.title.startsWith('Tools I use myself'), 'direct /work/my-tools opens its sheet')
+  await shot(page, 'desk-direct-my-tools')
   await page.click('.sh__close')
   await page.waitForTimeout(1200)
   s = await read(page)
@@ -150,7 +150,7 @@ const browser = await chromium.launch()
 
 
   // Every sheet: how many builds it shows, which GitHub links it carries, and that every picture loads.
-  const SHEETS = { 'client-tools': 7, products: 1, 'my-tools': 1, academic: 2, 'this-site': 1 }
+  const SHEETS = { 'client-tools': 7, products: 1, 'my-tools': 3, 'this-site': 1 }
   const REPOS = ['https://github.com/chevykt/domain-selector', 'https://github.com/chevykt/chevykt.github.io']
   for (const [id, n] of Object.entries(SHEETS)) {
     await page.goto(`${BASE}/work/${id}`, { waitUntil: 'networkidle' })

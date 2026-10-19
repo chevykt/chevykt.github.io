@@ -69,7 +69,7 @@ export const pages: PageRoute[] = [
     path: '/work',
     label: 'Work',
     title: `Work | ${SUFFIX}`,
-    description: `${workCount} builds: client tools for YouTube automation and lead research, a GovCon product, my own tools and academic projects.`,
+    description: `${workCount} builds: client tools for YouTube automation and lead research, a GovCon product and my own tools.`,
     icon: Briefcase,
     group: 'menu',
     badge: workCount,

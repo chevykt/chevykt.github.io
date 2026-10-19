@@ -100,6 +100,13 @@ for (const theme of ['light', 'dark']) {
     return { alpha: a, blur: s.backdropFilter }
   })
   check(sheet.alpha >= 0.85 && sheet.blur !== 'none', `${theme}: the Work sheet is frosted and near-opaque (alpha ${sheet.alpha}, ${sheet.blur})`)
+  // The service cards pile on top of each other: the card under one must never read through it.
+  await page.goto(`${BASE}/`, { waitUntil: 'networkidle' })
+  const card = await page.evaluate(() => {
+    const s = getComputedStyle(document.querySelector('.sv__card'))
+    return { alpha: s.backgroundColor.match(/[\d.]+/g).map(Number)[3] ?? 1, blur: s.backdropFilter }
+  })
+  check(card.alpha >= 0.85 && card.blur !== 'none', `${theme}: the stacked service cards are frosted and near-opaque (alpha ${card.alpha}, ${card.blur})`)
 }
 
 await page.setViewportSize({ width: 360, height: 800 })

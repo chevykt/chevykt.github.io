@@ -14,7 +14,7 @@ export const aboutSection = {
   titleBold: `${site.name}.`,
   lede: 'A full-stack developer who builds the tools content and research teams run every day.',
   lead: 'Chief Engineer at Claude Automation.',
-  leadQuiet: 'Freelance client tools for a content studio and others. Computer Science at PUP, class of 2027.',
+  leadQuiet: 'Freelance client tools for a content studio and others, with a background in computer science.',
   note: 'I also edit video, which is why so many of my builds are for content teams: I know where their hours go.',
   /** Who the Person JSON-LD says you work for. */
   employer: 'Claude Automation',
@@ -47,6 +47,6 @@ export type AboutCredential = {
 
 export const credentials: AboutCredential[] = [
   { id: 'role', title: 'Chief Engineer', detail: 'Claude Automation · 2026 to now', icon: Briefcase },
-  { id: 'school', title: 'BS Computer Science', detail: 'Polytechnic University of the Philippines · 2023 to 2027', icon: GraduationCap },
+  { id: 'school', title: 'Computer Science', detail: 'Polytechnic University of the Philippines', icon: GraduationCap },
   { id: 'place', title: `Based ${site.timePlace}`, detail: 'GMT+8 · Remote' },
 ]

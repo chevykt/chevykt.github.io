@@ -112,7 +112,7 @@ export const workChapters: WorkChapter[] = [
   {
     id: 'academic',
     title: 'Academic',
-    line: 'Computer Science coursework at PUP.',
+    line: 'Computer science projects from PUP.',
     count: academic.length,
     unit: 'projects',
     description: 'Two projects from the Polytechnic University of the Philippines: a student budget tracker and a game whose enemies evolve.',

@@ -48,6 +48,8 @@ const rules = [
   ...(names.length ? [{ name: 'client-names', files: [...new Set([...everything, ...tracked])], re: new RegExp(names.join('|'), 'i') }] : []),
   { name: 'template-readme', files: [join(ROOT, 'README.md'), join(ROOT, 'package.json')], re: /Portfolio Template|portfolio-template/i },
   { name: 'traction-claim', files: everything, re: /500\+/ },
+  // Keon's call: a background in computer science, never "student" or a graduation year.
+  { name: 'student-signal', files: everything, re: /class of 20\d\d|20\d\d to 20\d\d|20\d\d[–-]20\d\d|Computer Science student|coursework|COSC \d/i },
 ]
 
 const failures = []

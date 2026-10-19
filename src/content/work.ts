@@ -113,7 +113,7 @@ export const academic: WorkItem[] = [
   {
     id: 'baonbuddy',
     name: 'BaonBuddy',
-    kicker: 'Team lead · PUP coursework',
+    kicker: 'Team lead · Academic',
     summary:
       'Allowance and expense tracker for Filipino college students, with weekly budget math. I led the four-person team and built the authentication, sessions and database.',
     stack: 'PHP · MySQL · Bootstrap',
@@ -123,7 +123,7 @@ export const academic: WorkItem[] = [
   {
     id: 'mutagen-arena',
     name: 'Mutagen Arena',
-    kicker: 'AI case study · COSC 304',
+    kicker: 'AI case study · Academic',
     summary:
       'Top-down survival arena where the enemies evolve against the player using a genetic algorithm and simulated annealing. Built as the case study for an intro to AI course.',
     stack: 'Python · Genetic algorithms',
